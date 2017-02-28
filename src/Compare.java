@@ -16,9 +16,8 @@ public class Compare {
 
     public List<FileBean> getResult() {
         List<FileBean> result = new ArrayList<>();
-        if (getList()) ;
-        {
-            //并集去交 可优化
+        if (getList()) {
+            //归并去重 可优化
             List<FileBean> tempNew = Utils.NEW_FILE_LIST;
             List<FileBean> tempOld = Utils.OLD_FILE_LIST;
             List<FileBean> temp = new ArrayList<>(tempNew);
