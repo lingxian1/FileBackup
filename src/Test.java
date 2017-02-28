@@ -10,7 +10,7 @@ public class Test {
         FileBean fileBean=new FileBean();
         fileBean.setMD5("afda492eae923a8f299c38c1fef9c553");
         fileBean.setPath("D:\\IDE\\JAVA\\ASCII.jpg");
-        fileBean.setName("ASCII.jpg");
+        fileBean.setName("ASCIIx.jpg");
         //Utils.xlh(configfile,fileBean);
         Compare compare=new Compare(newfile,configfile);
         compare.getResult();
