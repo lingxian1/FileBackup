@@ -29,9 +29,9 @@ public class Compare {
             result.addAll(tempNew);
             result.addAll(tempOld);
 
-            for (FileBean s : result) {
-                System.out.println(s);
-            }
+//            for (FileBean s : result) {
+//                System.out.println(s);
+//            }
         }
         return result;
     }
@@ -40,7 +40,7 @@ public class Compare {
     public Boolean getList() {
         try {
             Utils.fxlh(configfile);
-            Utils.showAllFiles(newfile);
+            Utils.parseToFileBean(newfile);
             return true;
         } catch (Exception e) {
             e.printStackTrace();
