@@ -3,8 +3,8 @@
  */
 public class Test {
     public static void main(String[] args) {
-        Utils.firstUse();
-        Utils.showConfigMessage();
+        //Utils.ReBulid();
+        //Utils.showConfigMessage();
         new Operation().opera();
     }
 }

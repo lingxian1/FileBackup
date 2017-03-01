@@ -16,30 +16,29 @@ public class Operation {
         operationlist = compare.getResult();
  //       开始备份
         System.out.println("待操作数："+operationlist.size());
-//        for (FileBean temp : operationlist) {
-//            if (!temp.getState().equals("new") && (temp.getMD5() == null)) {
-//                deleteDir(new File(temp.getPath()));
-//                System.out.println("删除文件夹成功："+temp.getPath());
-//            }
-//            if (temp.getState().equals("new") && (temp.getMD5() == null)) {
-//                createDir(temp.getPath());
-//                System.out.println("创建文件夹成功："+temp.getPath());
-//            }
-//        }
-//        for (FileBean temp : operationlist) {
-//            if (!temp.getState().equals("new") && (temp.getMD5() != null)) {
-//                deleteFile(temp.getPath());
-//                System.out.println("删除文件成功："+temp.getPath());
-//            }
-//            if (temp.getState().equals("new") && (temp.getMD5() != null)) {
-//                copyFile(new File(temp.getPath()),
-//                        filePathTool(temp.getPath(), Constant.NEW_FILE_PATH, Constant.CONFIG_FILE_PATH));
-//                System.out.println("复制文件成功："+temp.getPath());
-//            }
-//        }
-//        //删除配置文件
-//        deleteFile(configfile.getPath());
-//        System.out.println("删除原配置文件成功！");
+
+        for (FileBean temp : operationlist) {
+            if (!temp.getState().equals("new") && (temp.getMD5() == "not file")) {
+                deleteDir(new File(temp.getPath()));
+
+            }
+            if (temp.getState().equals("new") && (temp.getMD5() == "not file")) {
+                createDir(filePathTool(temp.getPath(), Constant.NEW_FILE_PATH, Constant.CONFIG_FILE_PATH));
+            }
+        }
+        for (FileBean temp : operationlist) {
+            if (!temp.getState().equals("new") && (temp.getMD5() != "not file")) {
+                deleteFile(new File(temp.getPath()));
+            }
+            if (temp.getState().equals("new") && (temp.getMD5() != "not file")) {
+                copyFile(new File(temp.getPath()),
+                        filePathTool(temp.getPath(), Constant.NEW_FILE_PATH, Constant.CONFIG_FILE_PATH));
+                System.out.println("复制文件成功："+temp.getPath());
+            }
+        }
+        //删除配置文件
+        deleteFile(configfile);
+        System.out.println("删除原配置文件成功！");
     }
 
     //复制文件时获得目标路径 配置文件必须在目标文件夹下！
@@ -53,8 +52,8 @@ public class Operation {
     }
 
     //创建文件夹
-    public boolean createDir(String dirpath) {
-        File dir = new File(dirpath);
+    public boolean createDir(File dir) {
+        String dirpath=dir.getPath();
         if (dir.exists()) {// 判断目录是否存在
             System.out.println("创建目录失败，目标目录已存在！");
             return false;
@@ -72,12 +71,13 @@ public class Operation {
     }
 
     //删除文件
-    public boolean deleteFile(String filePath) {
+    public boolean deleteFile(File file) {
+        String filePath=file.getPath();
         Boolean flag = false;
-        File file = new File(filePath);
         if (file.isFile() && file.exists()) {
             file.delete();
             flag = true;
+            System.out.println("删除文件成功："+filePath);
         }
         return flag;
     }
@@ -97,6 +97,7 @@ public class Operation {
             deleteDir(files[i]);
         }
         path.delete();
+        System.out.println("删除文件夹成功："+path.getPath());
     }
 
     //文件复制

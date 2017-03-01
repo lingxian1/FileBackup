@@ -15,6 +15,8 @@ import java.util.List;
  * void showAllFiles(File dir);递归遍历所有文件（夹）并组装成FileBean 放入NEW_FILE_LIST
  * String getConfigFilePath(String path);获取配置文件路径
  * void save();保存序列化文件
+ * void ReBulid();重新设置备份文件夹配置
+ * void showConfigMessage();显示备份的文件内容
  */
 public class Utils {
     static List<FileBean> NEW_FILE_LIST = new ArrayList<>();
@@ -157,8 +159,16 @@ public class Utils {
         System.out.println("创建配置文件：" + path);
     }
 
-    public static void firstUse() {
+    public static void ReBulid() {
         try {
+            //如果存在
+            String temp=Utils.getConfigFilePath(Constant.CONFIG_FILE_PATH);
+            if(temp!=null) {
+                File file = new File(temp);
+                if (file.isFile() && file.exists()) {
+                    file.delete();
+                }
+            }
             showAllFiles(new File(Constant.CONFIG_FILE_PATH));
             save();
         } catch (Exception e) {
