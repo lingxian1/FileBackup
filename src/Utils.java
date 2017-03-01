@@ -1,4 +1,5 @@
 import java.io.*;
+import java.lang.reflect.Method;
 import java.math.BigInteger;
 import java.security.MessageDigest;
 import java.text.DateFormat;
@@ -52,7 +53,7 @@ public class Utils {
     }
 
     public static void fxlh(File file) {
-        //  String regex="get.*";
+          String regex="get.*";
         if (file.exists()) {
             ObjectInputStream ois;
             try {
@@ -64,13 +65,13 @@ public class Utils {
                     FileBean o = (FileBean) ois.readObject();
                     //设置状态
                     o.setState("old");
-//                   Method[] methods=o.getClass().getMethods();
-//                    for (Method method : methods) {
-//                        if (method.getName().matches(regex) && !method.getName().equals("getClass")) {
-//                            System.out.println(method.getName());
-//                            System.out.println(method.invoke(o));
-//                        }
-//                    }
+                   Method[] methods=o.getClass().getMethods();
+                    for (Method method : methods) {
+                        if (method.getName().matches(regex) && !method.getName().equals("getClass")) {
+                            System.out.println(method.getName());
+                            System.out.println(method.invoke(o));
+                        }
+                    }
                     OLD_FILE_LIST.add(o);
                 }
                 ois.close();
@@ -117,6 +118,8 @@ public class Utils {
             FileBean fileBean = new FileBean();
             fileBean.setName(fs[i].getName());
             fileBean.setPath(fs[i].getAbsolutePath());
+            fileBean.setRelativePath(filePathTool(fileBean.getPath()));
+            System.out.println("________________________"+fileBean.getRelativePath());
             fileBean.setMD5(getFileMD5(fs[i]));
             fileBean.setState("new");
             NEW_FILE_LIST.add(fileBean);
@@ -143,8 +146,16 @@ public class Utils {
                 return path + "\\" + fs.getName();
             }
         }
-        System.out.println("找不到文件");
+        System.out.println("找不到配置文件");
         return null;
+    }
+
+    public static String filePathTool(String filepath) {
+        String target = null;
+        //将filepath截去newfile然后用configfilepath替换得到相对路径
+        target = filepath.replace(Constant.NEW_FILE_PATH, Constant.CONFIG_FILE_PATH);
+        System.out.println("---------------------------------"+target);
+        return target;
     }
 
     public static void save() {
@@ -155,6 +166,7 @@ public class Utils {
         File file = new File(path);
         for (FileBean temp : NEW_FILE_LIST) {
             xlh(file, temp);
+            System.out.println(temp);
         }
         System.out.println("创建配置文件：" + path);
     }
