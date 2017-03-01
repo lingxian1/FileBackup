@@ -16,7 +16,10 @@ public class Compare {
 
     public List<FileBean> getResult() {
         List<FileBean> result = new ArrayList<>();
+        //获取两个list
         if (getList()) {
+            //保存序列化信息
+            Utils.save();
             //归并去重 可优化
             List<FileBean> tempNew = Utils.NEW_FILE_LIST;
             List<FileBean> tempOld = Utils.OLD_FILE_LIST;
@@ -25,6 +28,7 @@ public class Compare {
             tempOld.removeAll(temp);
             result.addAll(tempNew);
             result.addAll(tempOld);
+
             for (FileBean s : result) {
                 System.out.println(s);
             }
@@ -32,6 +36,7 @@ public class Compare {
         return result;
     }
 
+    //用于获取两个列表
     public Boolean getList() {
         try {
             Utils.fxlh(configfile);

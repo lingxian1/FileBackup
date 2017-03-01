@@ -1,17 +1,59 @@
 import java.io.*;
+import java.util.ArrayList;
+import java.util.List;
+
 
 /**
  * Created by LX on 2017/2/28.
  */
 public class Operation {
-    public static String filePathTool(String filepath,String newfile,String configfilepath) {
+
+    public void opera() {
+        List<FileBean> operationlist = new ArrayList<>();
+        File newfilepath = new File(Constant.NEW_FILE_PATH);
+        File configfile = new File(Utils.getConfigFilePath(Constant.CONFIG_FILE_PATH));
+        Compare compare = new Compare(newfilepath, configfile);
+        operationlist = compare.getResult();
+ //       开始备份
+        System.out.println("待操作数："+operationlist.size());
+//        for (FileBean temp : operationlist) {
+//            if (!temp.getState().equals("new") && (temp.getMD5() == null)) {
+//                deleteDir(new File(temp.getPath()));
+//                System.out.println("删除文件夹成功："+temp.getPath());
+//            }
+//            if (temp.getState().equals("new") && (temp.getMD5() == null)) {
+//                createDir(temp.getPath());
+//                System.out.println("创建文件夹成功："+temp.getPath());
+//            }
+//        }
+//        for (FileBean temp : operationlist) {
+//            if (!temp.getState().equals("new") && (temp.getMD5() != null)) {
+//                deleteFile(temp.getPath());
+//                System.out.println("删除文件成功："+temp.getPath());
+//            }
+//            if (temp.getState().equals("new") && (temp.getMD5() != null)) {
+//                copyFile(new File(temp.getPath()),
+//                        filePathTool(temp.getPath(), Constant.NEW_FILE_PATH, Constant.CONFIG_FILE_PATH));
+//                System.out.println("复制文件成功："+temp.getPath());
+//            }
+//        }
+//        //删除配置文件
+//        deleteFile(configfile.getPath());
+//        System.out.println("删除原配置文件成功！");
+    }
+
+    //复制文件时获得目标路径 配置文件必须在目标文件夹下！
+    public static File filePathTool(String filepath, String newfile, String configfilepath) {
         String target = null;
-        target=configfilepath.concat(filepath.replace(newfile,""));
-        return target;
+        //将filepath截去newfile然后拼接configfilepath
+        target = filepath.replace(newfile, configfilepath);
+        System.out.println(target);
+        File target2 = new File(target);
+        return target2;
     }
 
     //创建文件夹
-    public static boolean createDir(String dirpath) {
+    public boolean createDir(String dirpath) {
         File dir = new File(dirpath);
         if (dir.exists()) {// 判断目录是否存在
             System.out.println("创建目录失败，目标目录已存在！");
@@ -30,7 +72,7 @@ public class Operation {
     }
 
     //删除文件
-    public static boolean deleteFile(String filePath) {
+    public boolean deleteFile(String filePath) {
         Boolean flag = false;
         File file = new File(filePath);
         if (file.isFile() && file.exists()) {
@@ -41,7 +83,7 @@ public class Operation {
     }
 
     //删除文件夹
-    public static void deleteDir(File path) {
+    public void deleteDir(File path) {
         if (!path.exists()) {
             System.out.println("路径不存在");
             return;
@@ -58,7 +100,7 @@ public class Operation {
     }
 
     //文件复制
-    public static void copyFile(File source, File target) {
+    public void copyFile(File source, File target) {
         InputStream fis = null;
         OutputStream fos = null;
         try {

@@ -41,16 +41,12 @@ public class FileBean implements Serializable {
     public void setState(String state) {
         this.state =state;
     }
-    @Override
+
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
         FileBean fileBean = (FileBean) o;
-
         if (!name.equals(fileBean.name)) return false;
-        if (!path.equals(fileBean.path)) return false;
-        return MD5.equals(fileBean.MD5);
+        if(!MD5.equals(fileBean.MD5)) return false;
+        return true;
     }
 
     @Override
