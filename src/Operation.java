@@ -17,23 +17,22 @@ public class Operation {
 
         //开始备份
         System.out.println("待操作数：" + operationlist.size());
-       //先操作文件夹
-        for (FileBean temp : operationlist) {
-            if (!temp.getState().equals("new") && (temp.getMD5() == "not file")) {
-                deleteDir(new File(temp.getRelativePath()));
-
-            }
-            if (temp.getState().equals("new") && (temp.getMD5() == "not file")) {
-                createDir(filePathTool(temp.getPath(), Constant.NEW_FILE_PATH, Constant.CONFIG_FILE_PATH));
-            }
-        }
-        //操作文件1 删除
+       //先删除文件
         for (FileBean temp : operationlist) {
             if (!temp.getState().equals("new") && (temp.getMD5() != "not file")) {
                 deleteFile(new File(temp.getRelativePath()));
             }
         }
-        //操作文件2 复制
+        //操作文件夹
+        for (FileBean temp : operationlist) {
+            if (!temp.getState().equals("new") && (temp.getMD5().equals("not file"))) {
+                deleteDir(new File(temp.getRelativePath()));
+            }
+            if (temp.getState().equals("new") && (temp.getMD5().equals("not file"))) {
+                createDir(filePathTool(temp.getPath(), Constant.NEW_FILE_PATH, Constant.CONFIG_FILE_PATH));
+            }
+        }
+        //复制文件
         for (FileBean temp : operationlist) {
             if (temp.getState().equals("new") && (temp.getMD5() != "not file")) {
                 copyFile(new File(temp.getPath()),
@@ -86,14 +85,14 @@ public class Operation {
             System.out.println("路径不存在");
             return;
         }
-        if (path.isFile()) {
-            path.delete();
-            return;
-        }
-        File[] files = path.listFiles();
-        for (int i = 0; i < files.length; i++) {
-            deleteDir(files[i]);
-        }
+//        if (path.isFile()) {
+//            path.delete();
+//            return;
+//        }
+//        File[] files = path.listFiles();
+//        for (int i = 0; i < files.length; i++) {
+//            deleteDir(files[i]);
+//        }
         path.delete();
         System.out.println("删除文件夹成功：" + path.getPath());
     }

@@ -4,8 +4,9 @@
  */
 public class Test {
     public static void main(String[] args) {
-       //Utils.ReBulid();
+        //Utils.ReBulid();
        //Utils.showConfigMessage();
-        new Operation().opera();
+         new Operation().opera();
+        //new Operation().deleteDir(new File("D:\\IDE\\JAVA\\1\\11\\22"));
     }
 }
