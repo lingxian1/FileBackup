@@ -10,6 +10,7 @@ public class FileBean implements Serializable {
     String path;
     String MD5;
     String state;
+    //相对路径解决相同文件不同路径识别问题
     String relativePath;
 
     public String getName() {

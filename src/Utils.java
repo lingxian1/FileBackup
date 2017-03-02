@@ -3,24 +3,22 @@ import java.math.BigInteger;
 import java.security.MessageDigest;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-
 /**
  * Created by LX on 2017/2/22.
- * void xlh(File file, Object o);序列化工具
+ * void xlh(File file, List<?> objects);序列化工具
  * void fxlh(File file);反序列化工具 结果放入OLD_FILE_LIST
  * String getFileMD5(File file);文件MD5获取
  * void parseToFileBean(File dir);递归遍历所有文件（夹）并组装成FileBean 放入NEW_FILE_LIST
  * String getConfigFilePath(String path);获取配置文件路径
+ * String filePathTool(String filepath);获取相对路径
  * void save();保存序列化文件
  * void ReBulid();重新设置备份文件夹配置
- * void parseToFileBean(File dir);显示备份的文件内容并构成FileBean
+ * void showConfigMessage();显示配置文件信息
  */
 public class Utils {
-    static List<FileBean> NEW_FILE_LIST = new ArrayList<>();
-    static List<FileBean> OLD_FILE_LIST = new ArrayList<>();
+
 
     //    public static void xlh(File file, Object o) {
 //        try {
@@ -88,7 +86,7 @@ public class Utils {
 //                            System.out.println(method.invoke(o));
 //                        }
 //                    }
-                    OLD_FILE_LIST.add(o);
+                    Constant.OLD_FILE_LIST.add(o);
                 }
                 ois.close();
             } catch (Exception e1) {
@@ -136,7 +134,7 @@ public class Utils {
             fileBean.setRelativePath(temp);
             fileBean.setMD5(getFileMD5(fs[i]));
             fileBean.setState("new");
-            NEW_FILE_LIST.add(fileBean);
+            Constant.NEW_FILE_LIST.add(fileBean);
             if (fs[i].isDirectory()) {
                 try {
                     parseToFileBean(fs[i]);
@@ -197,7 +195,7 @@ public class Utils {
         String time = format.format(date);
         String path = Constant.CONFIG_FILE_PATH + File.separator + time + ".lx";
         File file = new File(path);
-        xlh(file, NEW_FILE_LIST);
+        xlh(file, Constant.NEW_FILE_LIST);
         System.out.println("创建配置文件：" + path);
     }
 
@@ -221,7 +219,7 @@ public class Utils {
     public static void showConfigMessage() {
         System.out.println("配置文件路径：" + getConfigFilePath(Constant.CONFIG_FILE_PATH));
         fxlh(new File(getConfigFilePath(Constant.CONFIG_FILE_PATH)));
-        for (FileBean temp : OLD_FILE_LIST) {
+        for (FileBean temp : Constant.OLD_FILE_LIST) {
             System.out.println(temp.toString());
         }
     }

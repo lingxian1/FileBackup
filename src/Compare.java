@@ -21,17 +21,17 @@ public class Compare {
             //保存序列化信息
             Utils.save();
             //归并去重 可优化
-            List<FileBean> tempNew = Utils.NEW_FILE_LIST;
-            List<FileBean> tempOld = Utils.OLD_FILE_LIST;
+            List<FileBean> tempNew = Constant.NEW_FILE_LIST;
+            List<FileBean> tempOld = Constant.OLD_FILE_LIST;
             List<FileBean> temp = new ArrayList<>(tempNew);
             tempNew.removeAll(tempOld);
             tempOld.removeAll(temp);
             result.addAll(tempNew);
             result.addAll(tempOld);
 
-//            for (FileBean s : result) {
-//                System.out.println(s);
-//            }
+            for (FileBean s : result) {
+                System.out.println(s);
+            }
         }
         return result;
     }
