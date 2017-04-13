@@ -13,41 +13,13 @@ import java.util.List;
  * void parseToFileBean(File dir);递归遍历所有文件（夹）并组装成FileBean 放入NEW_FILE_LIST
  * String getConfigFilePath(String path);获取配置文件路径
  * String filePathTool(String filepath);获取相对路径
- * void save();保存序列化文件
- * void ReBulid();重新设置备份文件夹配置
- * void showConfigMessage();显示配置文件信息
+ * void save(String configfilepath);保存序列化文件
+ * void ReBulid(String configfilepath);重新设置备份文件夹配置
+ * void showConfigMessage(String configfilepath);显示配置文件信息
+ * void checkConfigFile(String configfilepath);检查配置文件是否存在
  */
 public class Utils {
 
-
-    //    public static void xlh(File file, Object o) {
-//        try {
-//            if (file.exists()) {
-//                boolean isexist = true;
-//                FileOutputStream fo = new FileOutputStream(file, true);
-//                ObjectOutputStream oo = new ObjectOutputStream(fo);
-//                long pos = 0;
-//                if (isexist) {
-//                    //nio截取
-//                    pos = fo.getChannel().position() - 4;
-//                    fo.getChannel().truncate(pos);
-//                }
-//                //进行序列化
-//                oo.writeObject(o);
-//            } else {
-//                //文件不存在
-//                file.createNewFile();
-//                FileOutputStream fo = new FileOutputStream(file);
-//                ObjectOutputStream oos = new ObjectOutputStream(fo);
-//                //进行序列化
-//                oos.writeObject(o);
-//            }
-//        } catch (FileNotFoundException e) {
-//            e.printStackTrace();
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-//    }
 
     public static void xlh(File file, List<?> objects) {
         try {
@@ -144,32 +116,11 @@ public class Utils {
         }
     }
 
-//    public static void parseToFileBean(File dir, int j) throws Exception {
-//        File[] fs = dir.listFiles();
-//        for (int i = 0; i < fs.length; i++) {
-//            FileBean fileBean = new FileBean();
-//            fileBean.setName(fs[i].getName());
-//            fileBean.setPath(null);
-//            String temp=filePathTool(fs[i].getAbsolutePath());
-//            fileBean.setRelativePath(temp);
-//            fileBean.setMD5(getFileMD5(fs[i]));
-//            fileBean.setState("new");
-//            NEW_FILE_LIST.add(fileBean);
-//            if (fs[i].isDirectory()) {
-//                try {
-//                    parseToFileBean(fs[i],j);
-//                } catch (Exception e) {
-//                }
-//            }
-//        }
-//    }
-
     public static String getConfigFilePath(String path) {
         String regex = ".*.lx"; //假设配置文件以lx结尾
         File f = new File(path);
         if (!f.exists()) {
-            System.out.println("路径不存在");
-            return null;
+            return "error path";
         }
         File fa[] = f.listFiles();
         for (int i = 0; i < fa.length; i++) {
@@ -178,8 +129,7 @@ public class Utils {
                 return path + File.separator + fs.getName();
             }
         }
-        System.out.println("找不到配置文件");
-        return null;
+        return "no config file";
     }
 
     public static String filePathTool(String filepath) {
@@ -189,38 +139,54 @@ public class Utils {
         return target;
     }
 
-    public static void save() {
+    public static void save(String configfilepath) {
         Date date = new Date();
         DateFormat format = new SimpleDateFormat("yyyyMMddHHmmss");
         String time = format.format(date);
-        String path = Constant.CONFIG_FILE_PATH + File.separator + time + ".lx";
+        String path = configfilepath + File.separator + time + ".lx";
         File file = new File(path);
         xlh(file, Constant.NEW_FILE_LIST);
         System.out.println("创建配置文件：" + path);
     }
 
-    public static void ReBulid() {
+    public static void ReBulid(String configfilepath) {
         try {
             //如果存在
-            String temp = Utils.getConfigFilePath(Constant.CONFIG_FILE_PATH);
+            String temp = getConfigFilePath(configfilepath);
             if (temp != null) {
                 File file = new File(temp);
                 if (file.isFile() && file.exists()) {
                     file.delete();
+                    System.out.println("删除原配置文件成功");
                 }
             }
-            parseToFileBean(new File(Constant.CONFIG_FILE_PATH));
-            save();
+            parseToFileBean(new File(configfilepath));
+            save(configfilepath);
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
-    public static void showConfigMessage() {
-        System.out.println("配置文件路径：" + getConfigFilePath(Constant.CONFIG_FILE_PATH));
-        fxlh(new File(getConfigFilePath(Constant.CONFIG_FILE_PATH)));
+    public static void showConfigMessage(String configfilepath) {
+        System.out.println("配置文件路径：" + getConfigFilePath(configfilepath));
+        fxlh(new File(getConfigFilePath(configfilepath)));
         for (FileBean temp : Constant.OLD_FILE_LIST) {
             System.out.println(temp.toString());
+        }
+    }
+
+    public static int checkConfigFile(String configfilepath){
+        String label=getConfigFilePath(configfilepath);
+        if(label.equals("error path")){
+            System.out.println("路径不存在");
+            return -1;
+        }
+        if(label.equals("no config file")){
+            System.out.println("找不到配置文件");
+            return -1;
+        }else{
+            System.out.println("normal");
+            return 0;
         }
     }
 }

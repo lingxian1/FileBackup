@@ -4,9 +4,9 @@
  */
 public class Test {
     public static void main(String[] args) {
-        //Utils.ReBulid();
-       //Utils.showConfigMessage();
-         new Operation().opera();
-        //new Operation().deleteDir(new File("D:\\IDE\\JAVA\\1\\11\\22"));
+        // Utils.checkConfigFile(Constant.CONFIG_FILE_PATH);
+        //Utils.ReBulid(Constant.CONFIG_FILE_PATH);
+        // new Operation(Constant.NEW_FILE_PATH,Constant.CONFIG_FILE_PATH).opera();
+        // Utils.showConfigMessage(Constant.CONFIG_FILE_PATH);
     }
 }
